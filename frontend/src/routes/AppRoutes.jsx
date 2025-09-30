@@ -9,6 +9,8 @@ import StudentDetailPage from '../pages/StudentDetailPage';
 import MainLayout from '../components/layout/MainLayout';
 import NotFoundPage from '../pages/NotFoundPage';
 import AddStudentPage from '../pages/AddStudentPage';
+import ErrorBoundary from '../components/common/ErrorBoundary';
+import AlertsPage from '../pages/AlertsPage';
 
 const AppRoutes = () => {
     return (
@@ -20,7 +22,9 @@ const AppRoutes = () => {
                 path="/"
                 element={
                     <PrivateRoute>
-                        <MainLayout />
+                        <ErrorBoundary>
+                            <MainLayout />
+                        </ErrorBoundary>
                     </PrivateRoute>
                 }
             >
@@ -28,6 +32,7 @@ const AppRoutes = () => {
                 <Route path="students" element={<StudentsListPage />} />
                 <Route path="students/new" element={<AddStudentPage />} />
                 <Route path="students/:id" element={<StudentDetailPage />} />
+                <Route path="alerts" element={<AlertsPage />} />
             </Route>
 
             <Route path="*" element={<NotFoundPage />} />

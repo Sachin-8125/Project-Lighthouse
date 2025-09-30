@@ -1,31 +1,41 @@
-const httpStatus = require('http-status');
+const httpStatus = require('http-status').default;
 const config = require('../../config');
 const { ApiResponse } = require('../../utils/apiResponse');
 
+console.log('=== SIMPLIFIED ERROR MIDDLEWARE LOADED ===');
+
 const errorConverter = (err, req, res, next) => {
+  console.log('ERROR CONVERTER:', err.message);
   let error = err;
-  // You can add more specific error type conversions here if needed
   if (!(error instanceof ApiResponse)) {
-    const statusCode = error.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
-    const message = error.message || httpStatus[statusCode];
+    const statusCode = err.statusCode || err.status || 500;
+    const message = err.message || 'Internal Server Error';
     error = new ApiResponse(statusCode, message, null, config.env === 'development' ? err.stack : undefined);
   }
   next(error);
 };
 
-// eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
-  let { statusCode, message, stack } = err;
-
-  if (config.env === 'production' && !err.isOperational) {
-    statusCode = httpStatus.INTERNAL_SERVER_ERROR;
-    message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];
+  console.log('ERROR HANDLER:', err.message);
+  
+  // Ensure we always have valid values
+  let statusCode = 500;
+  let message = 'Internal Server Error';
+  
+  if (err && typeof err === 'object') {
+    statusCode = err.statusCode || err.status || err.code || 500;
+    message = err.message || 'Internal Server Error';
   }
-
+  
+  // Convert to number and validate
+  statusCode = parseInt(statusCode) || 500;
+  
+  console.log('Final status:', statusCode, 'message:', message);
+  
   res.status(statusCode).json({
     code: statusCode,
     message,
-    ...(config.env === 'development' && { stack: stack }),
+    ...(config.env === 'development' && err.stack && { stack: err.stack }),
   });
 };
 

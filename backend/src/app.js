@@ -24,11 +24,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Enable cors
 app.use(cors());
-app.options('*', cors());
 
 // Health check endpoint
 app.get('/', (req, res) => {
-    res.status(httpStatus.OK).send('AcadiaPulse Backend is running.');
+    res.status(200).send('Open Lighthouse Backend is running.');
 });
 
 // API routes
@@ -36,7 +35,7 @@ app.use('/api', apiRoutes);
 
 // Send back a 404 error for any unknown api request
 app.use((req, res, next) => {
-    res.status(httpStatus.NOT_FOUND).json(new ApiResponse(httpStatus.NOT_FOUND, 'Not Found'));
+    res.status(404).json(new ApiResponse(404, 'Not Found'));
 });
 
 // Convert error to ApiResponse, if needed

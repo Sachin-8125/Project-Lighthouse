@@ -1,6 +1,6 @@
 const app = require('./app');
 const config = require('./config');
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('../prisma/generated/prisma');
 
 const prisma = new PrismaClient();
 const PORT = config.port || 5001;

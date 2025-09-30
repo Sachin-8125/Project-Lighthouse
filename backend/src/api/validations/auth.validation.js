@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { UserRole } = require('@prisma/client');
+const { UserRole } = require('../../../prisma/generated/prisma');
 
 const register = {
   body: z.object({

@@ -15,4 +15,8 @@ router
     .route('/:studentId')
     .get(auth(), studentController.getStudent)
 
+router
+    .route('/:studentId/scores')
+    .post(auth(), validate(studentValidation.addScore), studentController.addScore)
+
 module.exports = router;

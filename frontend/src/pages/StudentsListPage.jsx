@@ -16,8 +16,9 @@ const StudentsListPage = () => {
             setIsLoading(true);
             try {
                 const response = await apiClient.get('/students');
-                setStudents(response.data.data);
-                setFilteredStudents(response.data.data);
+                const studentsData = response.data?.data || [];
+                setStudents(studentsData);
+                setFilteredStudents(studentsData);
             } catch (err) {
                 setError('Failed to fetch students.');
                 console.error(err);
@@ -88,7 +89,7 @@ const StudentsListPage = () => {
                             </tr>
                         </thead>
                         <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                            {filteredStudents.map((student) => (
+                            {(filteredStudents || []).map((student) => (
                                 <tr key={student.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm font-medium text-gray-900 dark:text-white">{student.name}</div>

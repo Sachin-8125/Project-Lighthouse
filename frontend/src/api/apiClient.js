@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1',
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -17,5 +17,14 @@ apiClient.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+export const getAlerts = () => {
+    const token = localStorage.getItem('token');
+    return apiClient.get('/alerts', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
 
 export default apiClient;

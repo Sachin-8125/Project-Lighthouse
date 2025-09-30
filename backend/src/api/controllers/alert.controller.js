@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('../../../prisma/generated/prisma');
 const { ApiResponse } = require('../../utils/apiResponse');
 
 const prisma = new PrismaClient();
@@ -17,7 +17,7 @@ const getAlerts = async (req, res, next) => {
                 riskScore: 'desc',
             },
         });
-        res.status(httpStatus.OK).json(new ApiResponse(httpStatus.OK, 'Open alerts retrieved successfully', alerts));
+        res.status(200).json(new ApiResponse(200, 'Open alerts retrieved successfully', alerts));
     } catch (error) {
         next(error);
     }
@@ -38,7 +38,7 @@ const updateAlertStatus = async (req, res, next) => {
             },
         });
 
-        res.status(httpStatus.OK).json(new ApiResponse(httpStatus.OK, 'Alert status updated successfully', updatedAlert));
+        res.status(200).json(new ApiResponse(200, 'Alert status updated successfully', updatedAlert));
     } catch (error) {
         next(error);
     }

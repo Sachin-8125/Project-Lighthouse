@@ -21,10 +21,10 @@ const DashboardPage = () => {
                     apiClient.get('/alerts')
                 ]);
 
-                const studentsData = studentsResponse.data.data;
-                const highRisk = studentsData.filter(s => s.risk_level === 'High').length;
-                const mediumRisk = studentsData.filter(s => s.risk_level === 'Medium').length;
-                const lowRisk = studentsData.filter(s => s.risk_level === 'Low').length;
+                const studentsData = studentsResponse.data?.data || [];
+                const highRisk = studentsData.filter(s => s.riskLevel === 'High').length;
+                const mediumRisk = studentsData.filter(s => s.riskLevel === 'Medium').length;
+                const lowRisk = studentsData.filter(s => s.riskLevel === 'Low').length;
                 
                 setStats({
                     high: highRisk,
@@ -33,7 +33,7 @@ const DashboardPage = () => {
                     total: studentsData.length
                 });
                 
-                setAlerts(alertsResponse.data.data.slice(0,5));
+                setAlerts((alertsResponse.data?.data || []).slice(0,5));
             } catch (err) {
                 setError("failed to fetch dashboard data");
                 console.error(err);
@@ -99,7 +99,7 @@ const DashboardPage = () => {
                         <AlertTriangle className="mr-2 h-5 w-5 text-red-500" /> Recent Alerts
                     </h2>
                     <div className="space-y-4">
-                        {alerts.length > 0 ? alerts.map(alert => (
+                        {(alerts || []).length > 0 ? (alerts || []).map(alert => (
                             <div key={alert.id} className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-md">
                                 <Link to={`/students/${alert.studentId}`} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
                                     {alert.student.name}
